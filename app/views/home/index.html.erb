@@ -1,0 +1,11 @@
+<div id="today-I">
+<%= form_tag('/actions') do %>
+Today, I 
+<%= text_field_tag :verb %>
+<%= hidden_field :verb_id, :value => '1' %>
+<%= text_field_tag :item %>
+<% end %>
+<ul id="verb-list">
+</ul>
+</div>
+<script src="/javascripts/jquery.autoGrowInput.js"></script>

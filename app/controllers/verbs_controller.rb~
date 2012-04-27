@@ -1,0 +1,7 @@
+class VerbsController < ApplicationController
+
+  def complete
+    @verbs = params[:q].empty? ? [] : Verb.where("verb REGEXP '^#{params[:q]}'")
+    render :partial => 'complete'
+  end
+end

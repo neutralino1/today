@@ -1,0 +1,7 @@
+<% if @verbs.empty? %>
+<li>No such verb</li>
+<% else %>
+<% @verbs.each do |v| %>
+<li><%= v.verb %></li>
+<% end %>
+<% end %>

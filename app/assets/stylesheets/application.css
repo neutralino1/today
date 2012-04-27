@@ -1,0 +1,48 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+*/
+
+body {
+    background-color:#EFEFE9;
+}
+
+ul {
+    list-style:none;
+    padding:0px;
+}
+
+#today-I {
+    color:rgba(0,0,0,.7);
+    font-family: 'Chau Philomene One', sans-serif;
+    font-size:70px;
+    text-align:center;
+    margin-top:300px;
+}
+
+#today-I input{
+   color:rgba(0,0,0,.7);
+   font-family: 'Chau Philomene One', sans-serif;
+   font-size:70px;
+   background:rgba(255,255,255,0); 
+   border:0px;
+   width:60px;
+}
+
+ul#verb-list{
+    position:fixed;
+    display:none;
+    color:rgba(0,0,0,.4);
+    font-size:50px;
+//   background:rgba(0,0,0,0.2); 
+//   height:200px;
+}
