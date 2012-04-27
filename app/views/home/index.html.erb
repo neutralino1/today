@@ -1,11 +1,7 @@
 <div id="today-I">
-<%= form_tag('/actions') do %>
-Today, I 
-<%= text_field_tag :verb %>
-<%= hidden_field :verb_id, :value => '1' %>
-<%= text_field_tag :item %>
-<% end %>
-<ul id="verb-list">
-</ul>
+<span id="today-i">Today, I </span><span id="verb"
+	       contenteditable="true">a</span><span id="end-of-verb"></span> <span id="item"
+	       contenteditable="true"></span>
+<div id="tip"></div>
 </div>
 <script src="/javascripts/jquery.autoGrowInput.js"></script>

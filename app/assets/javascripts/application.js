@@ -14,76 +14,66 @@
 //= require jquery_ujs
 //= require_tree .
 
+
 Verb = {
     init:function(){
-        this.Input.init();
-        this.List.init();
-        this.Input.connect(this.queryVerbs.bind(this));
-    },
-    queryVerbs:function(){
-        var q = this.Input.query();
-        if (q) $.get('/verbs/complete',{q:q},this.autoComplete.bind(this));
-        else this.List.hide();
-    },
-    autoComplete:function(data){
-        this.List.fill(data);
-        console.log(this.List.first());
-    },
-};
-
-Verb.Input = {
-    init:function(){
-        this.input = $('input#verb');
+        this.input = $('span#verb');
         this.reset();
-        this.input.autoGrowInput({comfortZone: 70, minWidth: 100, maxWidth: 400});
+        this.input.keyup(this.query.bind(this));
+	this.sentence = $('div#sentence');
+	this.endOfVerb = $('span#end-of-verb');
+	this.tip = $('div#tip');
+	this.validate = $.Event('validate');
     },
     reset:function(){
         this.focus();
-        this.input.val('');
+        this.input.html('');
     },
     focus:function(){
+        if (this.input.html() == "") this.input.html('&nbsp;');
         this.input.focus();
     },
-    anchor:function(){
-        var pos = this.input.position();
-        return {top:pos.top + this.input.height(), left:pos.left};
+    query:function(key){
+	if (key.keyCode != 13){
+	    this.endOfVerb.html('');
+            var q = this.value();
+            if (q) $.get('/verbs/complete',{q:q},this.autoComplete.bind(this));
+            else this.tip.html('');
+	}
+	else{
+	    var val = this.value();
+	    this.input.html(val+this.endOfVerb.html());
+	    this.endOfVerb.html('');
+	    this.validateCallBack();
+	}
     },
-    query:function(){
-        return this.input.val();
+    autoComplete:function(verb){
+	verb = $.trim(verb);
+	if (verb){
+	    var re = new RegExp("^"+this.value(),"g");
+            this.endOfVerb.html(verb.replace(re,''));
+	    this.tip.html('Hit Enter to validate');
+	}
+	else{
+	    this.tip.html('No such verb');
+	}
     },
-    connect:function(callback){
-        this.input.keyup(callback);
+    value:function(){
+	var val = this.input.html();
+	val = val.replace(/^\s|(<br>)+|\s$/, '');
+        return val;
+    },
+    onValidate:function(callback){
+	this.validateCallBack = callback;
     }
 };
 
-Verb.List = {
-    init:function(){
-        this.list = $('ul#verb-list');
-        this.hide();
-    },
-    hide:function(){
-        this.list.offset({top:0, left:0});
-        this.list.hide();        
-    },
-    show:function(){
-        this.list.offset(Verb.Input.anchor());
-        this.list.show();
-    },
-    fill:function(data){
-        this.list.html(data);
-        this.show();
-    },
-    first:function(){
-        console.log(this.list.find('li').first());
-        this.list.find('li').first().html();
-    }
-    
-};
 
 Home = {
     init: function(){
         Verb.init();
-        $('div#today-I').hover(Verb.Input.focus.bind(Verb.Input));
+	Verb.onValidate(function(){console.log("ee");});
+        $('div#today-I').hover(Verb.focus.bind(Verb));
     },
 };
 

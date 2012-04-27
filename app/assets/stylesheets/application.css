@@ -29,20 +29,15 @@ ul {
     margin-top:300px;
 }
 
-#today-I input{
-   color:rgba(0,0,0,.7);
-   font-family: 'Chau Philomene One', sans-serif;
-   font-size:70px;
-   background:rgba(255,255,255,0); 
-   border:0px;
-   width:60px;
+span#verb{
+    outline:0px;
 }
 
-ul#verb-list{
-    position:fixed;
-    display:none;
-    color:rgba(0,0,0,.4);
-    font-size:50px;
-//   background:rgba(0,0,0,0.2); 
-//   height:200px;
+span#end-of-verb{
+    color:rgba(0,0,0,.3);
+}
+
+div#tip {
+    color:rgba(0,0,0,.1);
+    font-size:20px;
 }

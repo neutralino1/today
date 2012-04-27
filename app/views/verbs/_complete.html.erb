@@ -1,7 +1,5 @@
-<% if @verbs.empty? %>
-<li>No such verb</li>
+<% if @verb.empty? %>
+No such verb
 <% else %>
-<% @verbs.each do |v| %>
-<li><%= v.verb %></li>
-<% end %>
+Press Tab to validate
 <% end %>
