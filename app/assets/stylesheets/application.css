@@ -29,7 +29,7 @@ ul {
     margin-top:300px;
 }
 
-span#verb{
+span#verb, span#item{
     outline:0px;
 }
 
@@ -40,4 +40,8 @@ span#end-of-verb{
 div#tip {
     color:rgba(0,0,0,.1);
     font-size:20px;
+}
+
+ul#suggestions li{
+    float:left;
 }

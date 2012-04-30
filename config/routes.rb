@@ -3,6 +3,7 @@ Today::Application.routes.draw do
   root :to => "home#index"
 #  resources :actions
   match "verbs/complete" => "verbs#complete", :via => :get
+  match "items/query" => "items#query", :via => :get
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,0 +1,7 @@
+<% if @items.empty? %>
+No suggestions
+<% else %>
+<ul>
+<% @items.each do |i|
+</ul>
+<% end %>

@@ -1,0 +1,8 @@
+<% if @items.empty? %>
+No suggestions
+<% else %>
+<% @items.each do |i| %>
+<img src="<%= i['posters']['profile'] %>">
+<% end %><br/>
+Select your result.
+<% end %>
