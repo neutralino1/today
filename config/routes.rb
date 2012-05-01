@@ -4,7 +4,8 @@ Today::Application.routes.draw do
 #  resources :actions
   match "verbs/complete" => "verbs#complete", :via => :get
   match "items/query" => "items#query", :via => :get
-
+  match "actions/create" => "actions#create", :via => :post
+  match "actions/poster" => "actions#poster", :via => :get
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

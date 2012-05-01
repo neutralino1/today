@@ -1,8 +1,18 @@
-<% if @items.empty? %>
-No suggestions
+<h2>Movies</h2>
+<% if @movies.empty? %>
+No movie suggestions
 <% else %>
-<% @items.each do |i| %>
-<img src="<%= i['posters']['profile'] %>">
+<% @movies.each do |i| %>
+<img src="<%= i['posters']['profile'] %>" data-picture="<%= i['posters']['detailed'] %>" data-url="<%= i['links']['alternate'] %>" data-what="movie" class="thumbnail">
+<% end %><br/>
+<% end %>
+<h2>TV shows</h2>
+<% if @tvshows.empty? %>
+No TV show suggestions
+<% else %>
+<% @tvshows.each do |i| %>
+<img src="<%= i[:picture] %>" class="thumbnail" alt="<%= i[:name] %>" data-picture="<%= i[:picture] %>" data-url="<%= i[:url] %>" data-what="tv-show">
 <% end %><br/>
 Select your result.
 <% end %>
+

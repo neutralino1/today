@@ -1,4 +1,4 @@
 class Item < ActiveRecord::Base
-  # attr_accessible :title, :body
+  attr_accessible :url, :what, :picture
   has_many :actions
 end

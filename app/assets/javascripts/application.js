@@ -75,6 +75,10 @@ Item = {
     init:function(){
         this.el = $('span#item');
         this.el.keyup(this.query.bind(this));
+        this.xhr = 0;
+    },
+    reset:function(){
+        this.el.html('');
     },
     focus:function(){
         this.el.html('a');
@@ -85,7 +89,10 @@ Item = {
     query:function(){
         var q = this.value();
         var verb = Verb.value();
-        if (q.length > 2) $.get('/items/query',{q:q, verb:verb},this.retur.bind(this));
+        if (q.length > 2) {
+            if (this.xhr) this.xhr.abort();
+            this.xhr = $.get('/items/query',{q:q, verb:verb},this.retur.bind(this));
+        }
     },
     value:function(){
 	var val = this.el.html();
@@ -100,12 +107,55 @@ Item = {
 Tip = {
     init:function(){
         this.el = $('div#tip');
+        this.setupThumbnails();
     },
     reset:function(){
         this.el.html('');
     },
     set:function(message){
         this.el.html(message);
+        this.setupThumbnails();
+    },
+    setupThumbnails:function(){
+        this.thumbs = $('img.thumbnail');
+        this.thumbs.click(this.createAction.bind(this));
+    },
+    createAction:function(event){
+        console.log(event.target.dataset.url);
+        data = event.target.dataset;
+        $.post('/actions/create',{what:data.what, picture:data.picture, url:data.url, verb:Verb.value()}, this.showAction.bind(this));
+    },
+    showAction:function(){
+        Poster.refresh();
+        Verb.reset();
+        Tip.reset();
+        Item.reset();
+    },
+};
+
+Poster = {
+    init:function(){
+        this.el = $('div#poster');
+        this.refresh();
+    },
+    refresh:function(){
+        $.get('/actions/poster',{},this.fill.bind(this));
+    },
+    fill:function(data){
+        this.el.html(data);
+        var size = $('div.block').width();
+        $('div.block img').each(function(){
+            var img = $(this);
+            if (img.width() < img.height()){
+                img.width('100%');
+            }
+            else {
+                img.height('100%');
+                var w = img.width();
+                var pad = (w - size)/2;
+                img.css('margin-left','-'+pad+'px');
+            }
+        });
     },
 };
 
@@ -114,6 +164,7 @@ Home = {
         Verb.init();
         Item.init();
         Tip.init();
+        Poster.init();
 	Verb.onValidate(Item.focus.bind(Item));
         $('div#today-I').hover(Verb.focus.bind(Verb));
     },

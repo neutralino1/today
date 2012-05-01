@@ -1,0 +1,11 @@
+<h2>Artists</h2>
+<% if @artists.empty? %>
+No artist suggestions
+<% else %>
+<% @artists.each do |i| %>
+<img src="<%= i[:picture] %>" data-picture="<%= i[:picture] %>" data-url="<%= i[:url] %>" data-what="artist" class="thumbnail">
+<% end %><br/>
+<br/>
+Select your result.
+<% end %>
+
