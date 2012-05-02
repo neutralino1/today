@@ -24,11 +24,28 @@ ul {
 }
 
 #today-I {
-    color:rgba(0,0,0,.7);
+    color:rgba(0,0,0,.9);
     font-family: 'Chau Philomene One', sans-serif;
     font-size:70px;
     text-align:center;
-//    margin-top:300px;
+    background-color:rgba(239, 239, 233, .2);
+    width:960px;
+    margin-left:auto;
+    margin-right:auto;
+    text-shadow:0px 0px 10px white;
+    margin-top:300px;
+    height:300px;
+}
+
+div#timeline {
+    width:960px;
+    margin-left:auto;
+    margin-right:auto;
+    color:rgba(0,0,0,.7);
+    font-family: 'Chau Philomene One', sans-serif;
+    font-size:20px;
+    background-color:rgba(239, 239, 233, .5);
+    margin-top : 40px;
 }
 
 span#verb, span#item{
@@ -57,20 +74,68 @@ img.thumbnail:hover {
     box-shadow: 0px 0px 7px rgba(42, 132, 202, 1);
 }
 
+div#poster {
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    z-index:-1000;
+}
+
+div#overlay {
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    z-index:-500;
+    background-color:rgba(239, 239, 233, .3);
+}
+
 div.block {
     float:left;
-    width:200px;
-    height:200px;
+    width:10%;
+//    height:200px;
     padding:0px;
     margin:0px;
     overflow:hidden;
-    border:1px solid rgba(0,0,0,1);
+//    border:1px solid rgba(0,0,0,1);
 }
 
-div.block img{
-//    width:100%;
+div#spinner {
+    display:none;
 }
 
 .fclear{
     clear:both;
+}
+
+@media only screen and (max-width: 500px) {
+    div.block {
+        width:25%;
+    }
+}
+
+@media only screen and (min-width: 500px) {
+    div.block {
+        width:20%;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    div.block {
+        width:16.66%;
+    }
+}
+
+@media only screen and (min-width:800px) {
+    div.block {
+        width:12.5%;
+    }
+}
+
+@media only screen and (min-width:1000px) {
+    div.block {
+        width:10%;
+    }
 }

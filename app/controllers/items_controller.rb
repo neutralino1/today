@@ -14,14 +14,13 @@ class ItemsController < ApplicationController
       uri.query = URI.encode_www_form(pars)
       res = Net::HTTP.get_response(uri)
       res = JSON.parse(res.body)
-#      raise res[:movies].inspect
       @movies = res['movies']
       uri = URI('http://www.tv.com/search')
       pars = {:q => params[:q]}
       uri.query = URI.encode_www_form(pars)
       res = Nokogiri::HTML(open(uri))
       @tvshows = []
-      res.css('div.show_result')[0..4].each do |r|
+      res.css('li.result.show')[0..4].each do |r|
         @tvshows << {:url => "http://www.tv.com" + r.css('a').first.attributes['href'].value,
           :picture => r.css('img').first.attributes['src'].value.sub('sm', 'pL'),
           :name => r.css('img').first.attributes['alt'].value}
@@ -39,6 +38,24 @@ class ItemsController < ApplicationController
         :picture => r.xpath("image[@size='extralarge']").children.first.content}
       end
       render :partial => 'music_suggestions'
+    when 'read'
+      uri = URI('https://www.googleapis.com/books/v1/volumes')
+      pars = {:key => 'AIzaSyDWJ0TicIIi28J6R6PXYqBMlt0XTbwyURQ', :q => params[:q], :maxResults => 5}
+      uri.query = URI.encode_www_form(pars)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.start do |h|
+        res = h.request(Net::HTTP::Get.new(uri.request_uri))
+      end
+#      res = http.get_response(uri)
+      res = JSON.parse(res.body)
+      @books = []
+      res['items'].each do |i|
+        @books << {:url => i['volumeInfo']['infoLink'],
+          :name => "#{i['volumeInfo']['title']} by #{i['volumeInfo']['authors'].first}",
+          :picture => i['volumeInfo']['imageLinks']['thumbnail']}
+      end
+      render :partial => 'read_suggestions'
     else
     end
   end

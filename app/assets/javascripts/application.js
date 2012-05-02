@@ -18,22 +18,24 @@
 Verb = {
     init:function(){
         this.input = $('span#verb');
-        this.reset();
-        this.input.keyup(this.query.bind(this));
-        this.input.keydown(this.validat.bind(this));
 	this.sentence = $('div#sentence');
 	this.endOfVerb = $('span#end-of-verb');
-	this.validate = $.Event('validate');
+        this.input.keyup(this.query.bind(this));
+        this.input.keydown(this.validat.bind(this));
+        this.reset();
     },
     reset:function(){
         this.focus();
         this.input.html('');
+	this.endOfVerb.html('');
     },
     focus:function(){
+        this.setEditable(true);
         if (this.input.html() == "") this.input.html('&nbsp;');
         this.input.focus();
     },
     query:function(key){
+        if (key.keyCode == 27) return Home.reset();
 	this.endOfVerb.html('');
         var q = this.value();
         if (q) $.get('/verbs/complete',{q:q},this.autoComplete.bind(this));
@@ -65,10 +67,13 @@ Verb = {
 	    this.input.html(val+this.endOfVerb.html());
 	    this.endOfVerb.html('');
             Tip.reset();
-            this.input.attr('contentEditable',false);
+            this.setEditable(false);
 	    this.validateCallBack();
         }
-    }
+    },
+    setEditable:function(bool){
+        this.input.attr('contentEditable',bool);
+    },
 };
 
 Item = {
@@ -81,16 +86,19 @@ Item = {
         this.el.html('');
     },
     focus:function(){
+        this.setEditable(true);
         this.el.html('a');
         this.el.focus();
         this.el.html('');
         Tip.set('movie, show...');
     },
-    query:function(){
+    query:function(event){
+        if (event.keyCode == 27) return Home.reset();
         var q = this.value();
         var verb = Verb.value();
         if (q.length > 2) {
             if (this.xhr) this.xhr.abort();
+            Tip.showSpinner();
             this.xhr = $.get('/items/query',{q:q, verb:verb},this.retur.bind(this));
         }
     },
@@ -102,19 +110,27 @@ Item = {
     retur:function(data){
         Tip.set(data);
     },
+    setEditable:function(bool){
+        this.el.attr('contentEditable',bool);
+    },
 };
 
 Tip = {
     init:function(){
         this.el = $('div#tip');
+        this.spinner = $('div#spinner');
         this.setupThumbnails();
     },
     reset:function(){
         this.el.html('');
     },
     set:function(message){
+        this.spinner.hide();
         this.el.html(message);
         this.setupThumbnails();
+    },
+    showSpinner:function(){
+        this.spinner.show();
     },
     setupThumbnails:function(){
         this.thumbs = $('img.thumbnail');
@@ -127,9 +143,7 @@ Tip = {
     },
     showAction:function(){
         Poster.refresh();
-        Verb.reset();
-        Tip.reset();
-        Item.reset();
+        Home.reset();
     },
 };
 
@@ -143,7 +157,12 @@ Poster = {
     },
     fill:function(data){
         this.el.html(data);
-        var size = $('div.block').width();
+        this.blocks = $('div.block');
+        this.scale();
+    },
+    scale:function(){
+        var size = this.blocks.width();
+        this.blocks.height(size);
         $('div.block img').each(function(){
             var img = $(this);
             if (img.width() < img.height()){
@@ -159,14 +178,36 @@ Poster = {
     },
 };
 
+Timeline = {
+    init:function(){
+        this.el = $('div#timeline');
+        this.refresh();
+    },
+    refresh:function(){
+        $.get('/actions/timeline',{},this.fill.bind(this));
+    },
+    fill:function(data){
+        this.el.html(data);
+    },
+};
+
 Home = {
     init: function(){
         Verb.init();
         Item.init();
         Tip.init();
         Poster.init();
+        Timeline.init();
 	Verb.onValidate(Item.focus.bind(Item));
         $('div#today-I').hover(Verb.focus.bind(Verb));
+        $(window).resize(Poster.scale.bind(Poster));
+    },
+    reset:function(){
+        Verb.reset();
+        Item.reset();
+        Tip.reset();
+        Item.setEditable(false);
+        Verb.setEditable(true);
     },
 };
 

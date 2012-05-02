@@ -8,7 +8,13 @@ class ActionsController < ApplicationController
   end
 
   def poster
-    @actions = Action.order('created_at DESC').all
+    # @actions = Action.order('created_at DESC').all
+    @actions = Action.order('RAND()').all
     render :partial => 'poster'
+  end
+
+  def timeline
+    @actions = Action.order('created_at DESC').all
+    render :partial => 'timeline'
   end
 end

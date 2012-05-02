@@ -1,0 +1,7 @@
+dsds
+<% @actions.each do |action| %>
+<div class="day">
+<div class="date"><%= action.created_at %></div>
+<div class="actions">You <%= action.verb.verb %> <%= action.item.url %></div>
+</div>
+<% end %>

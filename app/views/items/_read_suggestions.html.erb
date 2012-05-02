@@ -1,0 +1,10 @@
+<h2>Books</h2>
+<% if @books.empty? %>
+No book suggestions
+<% else %>
+<% @books.each do |i| %>
+<img src="<%= i[:picture] %>" data-picture="<%= i[:picture] %>" data-url="<%= i[:url] %>" data-what="book" class="thumbnail">
+<% end %><br/>
+Select your result.
+<% end %>
+
