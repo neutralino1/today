@@ -99,7 +99,10 @@ Item = {
         if (q.length > 2) {
             if (this.xhr) this.xhr.abort();
             Tip.showSpinner();
-            this.xhr = $.get('/items/query',{q:q, verb:verb},this.retur.bind(this));
+            this.xhr = $.ajax({url:'/items/query', 
+                               data:{q:q, verb:verb}, 
+                               success:this.retur.bind(this),
+                               error:Tip.error.bind(Tip)});
         }
     },
     value:function(){
@@ -130,11 +133,13 @@ Tip = {
         this.setupThumbnails();
     },
     showSpinner:function(){
+        this.reset();
         this.spinner.show();
     },
     setupThumbnails:function(){
-        this.thumbs = $('img.thumbnail');
+        this.thumbs = $('div.thumbnail');
         this.thumbs.click(this.createAction.bind(this));
+        this.scale();
     },
     createAction:function(event){
         console.log(event.target.dataset.url);
@@ -144,6 +149,24 @@ Tip = {
     showAction:function(){
         Poster.refresh();
         Home.reset();
+    },
+    error:function(){
+        this.set('Search failed.');
+    },
+    scale:function(){
+        var size = this.thumbs.width();
+        this.thumbs.find('img').each(function(){
+            var img = $(this);
+            if (img.width() < img.height()){
+                img.width('100%');
+            }
+            else {
+                img.height('100%');
+                var w = img.width();
+                var pad = (w - size)/2;
+                img.css('margin-left','-'+pad+'px');
+            }
+        });
     },
 };
 
@@ -197,7 +220,7 @@ Home = {
         Item.init();
         Tip.init();
         Poster.init();
-        Timeline.init();
+   //     Timeline.init();
 	Verb.onValidate(Item.focus.bind(Item));
         $('div#today-I').hover(Verb.focus.bind(Verb));
         $(window).resize(Poster.scale.bind(Poster));

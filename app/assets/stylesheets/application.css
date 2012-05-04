@@ -61,17 +61,24 @@ div#tip {
     font-size:20px;
 }
 
-img.thumbnail {
+div.thumbnail {
     cursor:pointer;
     -moz-box-shadow: 0px 0px 5px #fff;
     -webkit-box-shadow: 0px 0px 5px #fff;
     box-shadow: 0px 0px 5px rgba(0,0,0,.5);
     border:1px solid rgba(0,0,0,.5);
-    width:130px;
+    width:150px;
+    height:150px;
+    overflow:hidden;
+    float:left;
+    margin:4px;
 }
 
-img.thumbnail:hover {
+div.thumbnail:hover {
     box-shadow: 0px 0px 7px rgba(42, 132, 202, 1);
+}
+
+div.thumbnail img{
 }
 
 div#poster {

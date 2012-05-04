@@ -2,6 +2,9 @@ require 'net/http'
 require 'json'
 require 'open-uri'
 require 'nokogiri'
+require 'imdb'
+
+include Trakt
 
 class ItemsController < ApplicationController
 
@@ -9,6 +12,11 @@ class ItemsController < ApplicationController
     verb = params[:verb]
     case verb
     when 'watched'
+      @result_type = 'Movies & TV shows'
+      client = Trakt.connect('a0c144cdc8998145b83453b835d5950c')
+      @results = client.search(:movies, params[:q], 5) # imdb.movies[0..4].map { |m| Item.new_from(m) }
+      @results += client.search(:shows, params[:q], 5)
+=begin
       uri = URI('http://api.rottentomatoes.com/api/public/v1.0/movies.json')
       pars = {:apikey => 'rb2x856cbuak57fu5e7n48mh', :q => params[:q], :page_limit => 5}
       uri.query = URI.encode_www_form(pars)
@@ -25,6 +33,7 @@ class ItemsController < ApplicationController
           :picture => r.css('img').first.attributes['src'].value.sub('sm', 'pL'),
           :name => r.css('img').first.attributes['alt'].value}
       end
+=end
       render :partial => 'suggestions'
     when 'listened to'
       uri = URI('http://ws.audioscrobbler.com/2.0/')
