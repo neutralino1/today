@@ -142,12 +142,13 @@ Tip = {
         this.scale();
     },
     createAction:function(event){
-        console.log(event.target.dataset.url);
         data = event.target.dataset;
-        $.post('/actions/create',{what:data.what, picture:data.picture, url:data.url, verb:Verb.value()}, this.showAction.bind(this));
+        $.post('/actions/create',{name:data.name, what:data.what, picture:data.picture, url:data.url, verb:Verb.value()}, this.showAction.bind(this));
     },
-    showAction:function(){
-        Poster.refresh();
+    showAction:function(data){
+        console.log(data);
+        //Poster.refresh();
+        Poster.setPictureAtRandom(data);
         Home.reset();
     },
     error:function(){
@@ -173,10 +174,56 @@ Tip = {
 Poster = {
     init:function(){
         this.el = $('div#poster');
-        this.refresh();
+//        this.refresh();
+        this.random();
     },
     refresh:function(){
         $.get('/actions/poster',{},this.fill.bind(this));
+    },
+    random:function(){
+        $.get('/actions/pictures',{},this.fillRandom.bind(this));
+    },
+    fillRandom:function(data){
+        this.setupGrid();
+        this.blocks.size();
+        var it = null;
+        var block = null;
+        for (var i = 0 ; i < data.length ; i++){
+            this.setPictureAtRandom(data[i]);
+        }
+        this.scale();
+    },
+    setPictureAtRandom:function(item){
+        var blocks = (this.emptyBlocks.length == 0) ? this.blocks : this.emptyBlocks;
+        var it = Math.floor(Math.random() * blocks.length);
+        block = $(blocks[it]);
+        ov = block.find('.block-overlay');
+        ov.text(item.name);
+        ov.before('<img src="'+item.picture+'">');
+        block.removeClass('empty');
+        this.emptyBlocks = $('div.block.empty');
+    },
+    setupGrid:function(){
+        var height = $(window).height();
+        var width = $(window).width();
+        var blockSize = Math.round(width/10);
+        this.nBlocks = Math.floor(10 * height/blockSize) + 1;
+        this.blocks = $();
+        var b = null;
+        for (var i=0;i<this.nBlocks;i++){
+            b = $(document.createElement('div'));
+            b.addClass('block empty');
+            ov = $(document.createElement('div'));
+            ov.addClass('block-overlay faded');
+            b.html(ov);
+            ov.hover(this.highlightBlock.bind(this), this.highlightBlock.bind(this));
+            this.blocks = this.blocks.add(b);
+        }
+        this.emptyBlocks = this.blocks;
+        this.el.html(this.blocks);
+    },
+    highlightBlock:function(event){
+        $(event.target).toggleClass('faded');
     },
     fill:function(data){
         this.el.html(data);

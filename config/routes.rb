@@ -6,6 +6,7 @@ Today::Application.routes.draw do
   match "items/query" => "items#query", :via => :get
   match "actions/create" => "actions#create", :via => :post
   match "actions/poster" => "actions#poster", :via => :get
+  match "actions/pictures" => "actions#pictures", :via => :get
   match "actions/timeline" => "actions#timeline", :via => :get
   # The priority is based upon order of creation:
   # first created -> highest priority.

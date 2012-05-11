@@ -3,9 +3,9 @@
 No results found
 <% else %>
 <% @results[0..4].each do |it| %>
-<div class="thumbnail"><img src="<%= it.picture %>" data-picture="<%= it.picture %>" data-url="<%= it.url %>" data-what="<%= it.what %>" alt="<%= it.name %>"></div>
+<div class="thumbnail"><img src="<%= it.picture %>" data-picture="<%= it.picture %>" data-url="<%= it.url %>" data-what="<%= it.what %>" alt="<%= it.name %>" data-name="<%= it.name %>"></div>
 <% end %>
 <% @results[5..9].each do |it| %>
-<div class="thumbnail"><img src="<%= it.picture %>" data-picture="<%= it.picture %>" data-url="<%= it.url %>" data-what="<%= it.what %>" alt="<%= it.name %>"></div>
+<div class="thumbnail"><img src="<%= it.picture %>" data-picture="<%= it.picture %>" data-url="<%= it.url %>" data-what="<%= it.what %>" alt="<%= it.name %>" data-name="<%= it.name %>"></div>
 <% end %>
 <% end %>

@@ -36,17 +36,20 @@ class ItemsController < ApplicationController
 =end
       render :partial => 'suggestions'
     when 'listened to'
+      @result_type = 'Artists'
       uri = URI('http://ws.audioscrobbler.com/2.0/')
       pars = {:api_key => 'cc29f9738ebdf3a626c29500a0f3f88b', :method => 'artist.search', :artist => params[:q],
         :limit => 5}
       uri.query = URI.encode_www_form(pars)
       res = Nokogiri::HTML(open(uri))
-      @artists = []
+      @results = []
       res.xpath('//artist').each do |r|
-        @artists<<{:url => r.css('url').first.children.first.content,
-        :picture => r.xpath("image[@size='extralarge']").children.first.content}
+        @results << Item.new(:url => r.css('url').first.children.first.content,
+                             :picture => r.xpath("image[@size='extralarge']").children.first.content,
+                             :what => 'artist',
+                             :name => r.css('name').first.content)
       end
-      render :partial => 'music_suggestions'
+      render :partial => 'suggestions'
     when 'read'
       uri = URI('https://www.googleapis.com/books/v1/volumes')
       pars = {:key => 'AIzaSyDWJ0TicIIi28J6R6PXYqBMlt0XTbwyURQ', :q => params[:q], :maxResults => 5}
